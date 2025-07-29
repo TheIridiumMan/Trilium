@@ -19,7 +19,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+
+      - name: Install dependencies with downgraded Electron
+        run: |
+          npm install
+          npm install electron@%ELECTRON_VERSION% --save-dev
 
       - name: Install dependencies with downgraded Electron
         run: |
