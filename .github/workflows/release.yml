@@ -44,7 +44,7 @@ jobs:
 
       # Package the Electron app for Win7-x86
       - name: Build Electron App
-        run: pnpm electron:build -- --ia32
+        run: npx electron-builder --ia32
 
       # Upload the artifact
       - name: Upload build artifact
