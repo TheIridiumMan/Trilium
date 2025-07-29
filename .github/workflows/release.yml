@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: pnpm
 
       # Install dependencies
@@ -38,13 +38,11 @@ jobs:
       - name: Force Electron 17.4.11
         run: pnpm install electron@17.4.11 --save-exact --workspace-root
 
-      # Build the Electron app only (skip server)
-      - name: Build Electron app
-        run: pnpm nx build desktop --skip-nx-cache
+      - name: Install electron-builder
+        run: pnpm add -D electron-builder@26.0.12
 
-      # Package the Electron app for Win7-x86
-      - name: Build Electron App
-        run: npx electron-builder --ia32
+      - name: Build Win7-compatible x86 app
+        run: pnpm exec electron-builder --ia32
 
       # Upload the artifact
       - name: Upload build artifact
