@@ -32,7 +32,7 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --legacy-peer-deps
+        run: pnpm install --no-frozen-lockfile
 
       # Force Electron version compatible with Windows 7
       - name: Force Electron 17.4.11
