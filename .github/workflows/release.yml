@@ -48,7 +48,11 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm install electron@17.4.11 --save-dev
+          npm rebuild --arch=ia32 --target=17.4.11
+
 
       - uses: nrwl/nx-set-shas@v4
 
