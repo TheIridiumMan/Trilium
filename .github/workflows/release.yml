@@ -43,8 +43,8 @@ jobs:
         run: pnpm nx build desktop --skip-nx-cache
 
       # Package the Electron app for Win7-x86
-      - name: Package app for Windows x86
-        run: pnpm electron-builder --win --ia32
+      - name: Build Electron App
+        run: pnpm electron:build -- --ia32
 
       # Upload the artifact
       - name: Upload build artifact
