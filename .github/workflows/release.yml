@@ -2,52 +2,39 @@ name: Win7-x86 Build
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: write
 
 jobs:
   build-win7-x86:
-    name: Build Trilium Next for Win7-x86
     runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup pnpm so "workspace:*" works
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.13.1
+          version: 8
 
-      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           cache: pnpm
 
-      # Install dependencies
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile -w
 
-      # Force Electron version compatible with Windows 7
-      - name: Force Electron 17.4.11
-        run: pnpm install electron@17.4.11 --save-exact --workspace-root
+      - name: Force Electron 17 for Win7 support
+        run: pnpm install electron@17.4.11 --save-exact -w
 
-      - name: Install electron-builder
-        run: pnpm add -D electron-builder@26.0.12 --workspace-root
-
+      # ✅ Build the Electron app
       - name: Build Electron app source
         run: pnpm nx build desktop --skip-nx-cache
-  
-      - name: Build Win7-compatible x86 app
-        run: pnpm exec electron-builder --ia32
 
-      # Upload the artifact
+      # ✅ Package for Windows 7 x86
+      - name: Package app
+        run: pnpm electron-builder --win --ia32 --dir --config electron-builder.yml
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
