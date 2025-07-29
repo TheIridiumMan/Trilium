@@ -36,7 +36,7 @@ jobs:
 
       # Force Electron version compatible with Windows 7
       - name: Force Electron 17.4.11
-        run: pnpm install electron@17.4.11 --save-exact
+        run: pnpm install electron@17.4.11 --save-exact --workspace-root
 
       # Build the Electron app only (skip server)
       - name: Build Electron app
