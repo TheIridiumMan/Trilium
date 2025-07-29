@@ -7,6 +7,7 @@
     "output": "dist"
   }
 },
+  "postinstall": "electron-builder install-app-deps",
   "scripts": {
     "client:test": "nx test client",
     "client:build": "nx build client",
@@ -28,6 +29,8 @@
   },
   "private": true,
   "devDependencies": {
+      "electron": "17.4.11",
+     "electron-builder": "^26.0.12",
     "@electron/rebuild": "4.0.1",
     "@nx/devkit": "21.3.7",
     "@nx/esbuild": "21.3.7",
