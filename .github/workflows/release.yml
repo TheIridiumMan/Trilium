@@ -1,46 +1,54 @@
-name: Build Win7 x86 Compatible
+name: Win7-x86 Build
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
 
 jobs:
   build-win7-x86:
-    name: Build Trilium for Win7 x86
+    name: Build Trilium Next for Win7-x86
     runs-on: windows-latest
-
-    env:
-      ELECTRON_VERSION: "17.4.11"
-
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Setup pnpm so "workspace:*" works
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: pnpm
 
-      - name: Install dependencies with downgraded Electron
-        run: |
-          npm install
-          npm install electron@%ELECTRON_VERSION% --save-dev
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --legacy-peer-deps
 
-      - name: Install dependencies with downgraded Electron
-        run: |
-          npm install
-          npm install electron@%ELECTRON_VERSION% --save-dev
-          echo "Electron downgraded to %ELECTRON_VERSION%"
+      # Force Electron version compatible with Windows 7
+      - name: Force Electron 17.4.11
+        run: pnpm install electron@17.4.11 --save-exact
 
-      - name: Force 32-bit build
-        run: |
-          npx electron-builder --win --ia32 --config.extraMetadata.version=0.97.1-win7
+      # Build the Electron app only (skip server)
+      - name: Build Electron app
+        run: pnpm nx build desktop --skip-nx-cache
 
-      - name: List Build Outputs
-        run: |
-          Get-ChildItem dist -Recurse
+      # Package the Electron app for Win7-x86
+      - name: Package app for Windows x86
+        run: pnpm electron-builder --win --ia32
 
-      - name: Upload Artifact
+      # Upload the artifact
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: trilium-win7-x86
-          path: dist/
+          name: trilium-next-win7-x86
+          path: dist/*
