@@ -39,7 +39,7 @@ jobs:
         run: pnpm install electron@17.4.11 --save-exact --workspace-root
 
       - name: Install electron-builder
-        run: pnpm add -D electron-builder@26.0.12
+        run: pnpm add -D electron-builder@26.0.12 --workspace-root
 
       - name: Build Win7-compatible x86 app
         run: pnpm exec electron-builder --ia32
