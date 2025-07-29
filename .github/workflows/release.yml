@@ -1,71 +1,42 @@
-name: Build Artifacts Only
+name: Build Win7 x86 Compatible
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "v*"
-
-permissions:
-  contents: write
-  discussions: write
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
-  make-electron:
-    name: Make Electron
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos, linux, windows]
-        arch: [x64, arm64, ia32]
-        include:
-          - os: macos
-            runs-on: macos-latest
-            shell: bash
-            forge_platform: darwin
-          - os: linux
-            runs-on: ubuntu-latest
-            shell: bash
-            forge_platform: linux
-          - os: windows
-            runs-on: windows-latest  # Must be a valid GitHub-hosted runner
-            shell: cmd
-            forge_platform: win32
-    runs-on: ${{ matrix.runs-on }}
+  build-win7-x86:
+    name: Build Trilium for Win7 x86
+    runs-on: windows-latest
+
+    env:
+      ELECTRON_VERSION: "17.4.11"
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Node & dependencies
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'pnpm'
+          node-version: 18
+          cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies with downgraded Electron
         run: |
-          pnpm install --frozen-lockfile
-          pnpm install electron@17.4.11 --save-dev
-          npm rebuild --arch=ia32 --target=17.4.11
+          npm install
+          npm install electron@%ELECTRON_VERSION% --save-dev
+          echo "Electron downgraded to %ELECTRON_VERSION%"
 
+      - name: Force 32-bit build
+        run: |
+          npx electron-builder --win --ia32 --config.extraMetadata.version=0.97.1-win7
 
-      - uses: nrwl/nx-set-shas@v4
+      - name: List Build Outputs
+        run: |
+          Get-ChildItem dist -Recurse
 
-      - name: Run the build
-        uses: ./.github/actions/build-electron
-        with:
-          os: ${{ matrix.os }}
-          arch: ${{ matrix.arch }}
-          shell: ${{ matrix.shell }}
-          forge_platform: ${{ matrix.forge_platform }}
-
-      - name: Upload the artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-desktop-${{ matrix.os }}-${{ matrix.arch }}
-          path: apps/desktop/upload/*.*
+          name: trilium-win7-x86
+          path: dist/
