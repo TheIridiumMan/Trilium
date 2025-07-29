@@ -2,9 +2,11 @@
   "name": "@triliumnext/source",
   "version": "0.97.1",
   "description": "Build your personal knowledge base with Trilium Notes",
+  "build": {
   "directories": {
-    "doc": "docs"
-  },
+    "output": "dist"
+  }
+},
   "scripts": {
     "client:test": "nx test client",
     "client:build": "nx build client",
