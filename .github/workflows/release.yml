@@ -31,7 +31,7 @@ jobs:
 
       # ✅ Build the Electron app
       - name: Build Electron app source
-        run: pnpm nx build desktop --skip-nx-cache
+        run: pnpm nx build desktop 
 
       # ✅ Package for Windows 7 x86
       - name: Package app
