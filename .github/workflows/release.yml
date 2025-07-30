@@ -31,16 +31,14 @@ jobs:
            pnpm install electron@17.4.11 --save-exact -w
            pnpm add -D vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy  -w
            pnpm add -D @inlang/paraglide-js -w
-     - name: Install dependencies
-       run: pnpm install --no-frozen-lockfile -w
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile -w
 
-     - name: Sync SvelteKit and build website
-       run: |
-    pnpm nx sync website
-    pnpm nx build website
+      - name: Sync SvelteKit and build website
+        run: |
+         pnpm nx sync website
+         pnpm nx build website
 
-    - name: Build Electron app source
-      run: pnpm nx build desktop
 
       # ✅ Build the Electron app
       - name: Build Electron app source
