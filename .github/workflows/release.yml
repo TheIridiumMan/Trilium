@@ -27,7 +27,9 @@ jobs:
            pnpm install --no-frozen-lockfile -w
 
      # - name: Force Electron 17 for Win7 support
-     #   run: pnpm install electron@17.4.11 --save-exact -w
+     #   run: |
+           pnpm install electron@17.4.11 --save-exact -w
+           pnpm add -D vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy
 
       # ✅ Build the Electron app
       - name: Build Electron app source
