@@ -30,6 +30,7 @@ jobs:
         run: |
            pnpm install electron@17.4.11 --save-exact -w
            pnpm add -D vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy  -w
+           pnpm add -D @inlang/paraglide-js -w
 
       # ✅ Build the Electron app
       - name: Build Electron app source
