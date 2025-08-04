@@ -25,7 +25,6 @@ jobs:
               --mwUrl=https://wiki.osdev.org \
               --customMainPage=Main_Page \
               --adminEmail=amrfahmy20075@gmail.com \
-              --userAgent="mwoffliner/1.16.0 (https://github.com/openzim/mwoffliner)" \
               --verbose
 
       - name: Compress ZIM with xz
