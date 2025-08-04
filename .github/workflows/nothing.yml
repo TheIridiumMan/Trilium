@@ -22,8 +22,8 @@ jobs:
             -v "$PWD/output":/output \
             ghcr.io/openzim/mwoffliner:latest \
             mwoffliner \
-              --mwUrl=https:https://wiki.osdev.org/Expanded_Main_Page \
-              --customMainPage=Main_Page \
+              --mwUrl=https:https://wiki.osdev.org/Wiki/ \
+              --customMainPage=Expanded_Main_Page \
               --adminEmail=amrfahmy20075@gmail.com \
               --verbose
 
