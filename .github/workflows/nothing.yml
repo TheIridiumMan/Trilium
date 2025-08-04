@@ -18,15 +18,7 @@ jobs:
       - name: Run mwoffliner for OSDev Wiki
         run: |
           mkdir output
-          docker run --rm \
-            -v "$PWD/output":/output \
-            ghcr.io/openzim/mwoffliner:latest \
-            mwoffliner \
-         --mwUrl=https://wiki.osdev.org \
-    --customMainPage=Expanded_Main_Page \
-             --userAgent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" \ 
---adminEmail=amrfahmy20075@gmail.com \
-              --verbose
+          docker run -v /my-path:/output:rw --name mwoffliner_osdev_org --detach --cpu-shares 3072 --memory-swappiness 0 --memory 2147483648 ghcr.io/openzim/mwoffliner:1.16.0 mwoffliner --webp --mwUrl="https://wiki.osdev.org/" --format="nopic:nopic" --format="novid:maxi" --verbose="log" --osTmpDir="/dev/shm" --publisher="openZIM" --adminEmail="contact@kiwix.org" --forceRender="ActionParse" --customZimTitle="osdev.org" --outputDirectory="/output" --customZimFavicon="https://wiki.osdev.org/skins/common/images/osdev.png" --customZimDescription="About the creation of operating systems" --optimisationCacheUrl="--------"
 
       - name: Compress ZIM with xz
         run: |
