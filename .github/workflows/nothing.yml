@@ -1,9 +1,9 @@
 name: Build OSDev Wiki ZIM (Docker)
 
 on:
-  workflow_dispatch: # Manual run
+  workflow_dispatch:
   schedule:
-    - cron: "0 0 1 * *" # Optional: run monthly on the 1st
+    - cron: "0 0 1 * *" # Optional monthly build
 
 jobs:
   build:
@@ -13,17 +13,18 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Pull mwoffliner Docker image
-        run: docker pull ghcr.io/openzim/mwoffliner
+        run: docker pull ghcr.io/openzim/mwoffliner:latest
 
       - name: Run mwoffliner for OSDev Wiki
         run: |
           mkdir output
           docker run --rm \
             -v "$PWD/output":/output \
-            ghcr.io/openzim/mwoffliner \
+            ghcr.io/openzim/mwoffliner:latest \
             mwoffliner \
               --url=https://wiki.osdev.org \
               --mwUrl=https://wiki.osdev.org/wiki/ \
+              --adminEmail=amrfahmy20075@gmail.com \
               --output=/output/osdevwiki.zim \
               --verbose
 
