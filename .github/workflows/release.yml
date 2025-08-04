@@ -23,21 +23,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-           pnpm nx build website
            pnpm install --no-frozen-lockfile -w
 
-      - name: Force Electron 17 for Win7 support
+      - name: Force Electron 21 for Win7 support
         run: |
            pnpm install electron@21 --save-exact -w
-           pnpm add -D vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy  -w
-           pnpm add -D @inlang/paraglide-js -w
+           
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile -w
-
-      - name: Sync SvelteKit and build website
-        run: |
-         pnpm nx sync website
-         pnpm nx build website
 
 
       # ✅ Build the Electron app
@@ -46,7 +39,7 @@ jobs:
 
       # ✅ Package for Windows 7 x86
       - name: Package app
-        run: pnpm electron-builder --win --ia32 --dir --config electron-builder.yml
+        run: pnpm nx --project=desktop electron-forge:make -- --arch=ia32 --platform=win32
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
