@@ -1,21 +1,26 @@
 name: Build OSDev Wiki ZIM
 
 on:
-  workflow_dispatch: # run manually
+  workflow_dispatch: # Manual run
   schedule:
-    - cron: "0 0 1 * *" # run monthly
+    - cron: "0 0 1 * *" # Optional: run automatically on the 1st of every month
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y nodejs npm redis-server
+          sudo apt-get install -y redis-server xz-utils
 
       - name: Install mwoffliner
-        run: npm install -g mwoffliner
+        run: npm install -g mwoffliner --silent
 
       - name: Start Redis
         run: redis-server --daemonize yes
@@ -28,8 +33,13 @@ jobs:
             --output=osdevwiki.zim \
             --verbose
 
-      - name: Upload ZIM as artifact
+      - name: Compress ZIM with xz
+        run: |
+          xz -z -9 osdevwiki.zim
+          ls -lh osdevwiki.zim.xz
+
+      - name: Upload compressed ZIM as artifact
         uses: actions/upload-artifact@v4
         with:
           name: osdev-wiki
-          path: osdevwiki.zim
+          path: osdevwiki.zim.xz
