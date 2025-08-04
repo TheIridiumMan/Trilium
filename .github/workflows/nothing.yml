@@ -20,7 +20,7 @@ jobs:
           mkdir output
           docker run --rm \
             -v "$PWD/output":/output \
-            openzim/mwoffliner \
+            ghcr.io/openzim/mwoffliner \
             mwoffliner \
               --url=https://wiki.osdev.org \
               --mwUrl=https://wiki.osdev.org/wiki/ \
