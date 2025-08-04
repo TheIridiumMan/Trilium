@@ -22,10 +22,8 @@ jobs:
             -v "$PWD/output":/output \
             ghcr.io/openzim/mwoffliner:latest \
             mwoffliner \
-              --url=https://wiki.osdev.org \
               --mwUrl=https://wiki.osdev.org/wiki/ \
               --adminEmail=amrfahmy20075@gmail.com \
-              --output=/output/osdevwiki.zim \
               --verbose
 
       - name: Compress ZIM with xz
