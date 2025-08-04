@@ -15,7 +15,7 @@ jobs:
           sudo apt-get install -y nodejs npm redis-server
 
       - name: Install mwoffliner
-        run: npm install -g mwoffliner --silent
+        run: npm install -g mwoffliner
 
       - name: Start Redis
         run: redis-server --daemonize yes
