@@ -1,0 +1,35 @@
+name: Build OSDev Wiki ZIM
+
+on:
+  workflow_dispatch: # run manually
+  schedule:
+    - cron: "0 0 1 * *" # run monthly
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm redis-server
+
+      - name: Install mwoffliner
+        run: npm install -g mwoffliner --silent
+
+      - name: Start Redis
+        run: redis-server --daemonize yes
+
+      - name: Run mwoffliner for OSDev Wiki
+        run: |
+          mwoffliner \
+            --url=https://wiki.osdev.org \
+            --mwUrl=https://wiki.osdev.org/wiki/ \
+            --output=osdevwiki.zim \
+            --verbose
+
+      - name: Upload ZIM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: osdev-wiki
+          path: osdevwiki.zim
