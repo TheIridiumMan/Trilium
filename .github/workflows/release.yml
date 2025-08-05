@@ -22,7 +22,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile -w
+        run: pnpm install --no-frozen-lockfile -w
         
       # This step must come AFTER the main install.
       # It will override the default Electron version with one compatible with Win 7.
