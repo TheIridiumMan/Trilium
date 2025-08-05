@@ -30,8 +30,8 @@ jobs:
         run: pnpm add electron@22 --save-exact -w
 
       # This step is crucial and was missing. It prepares the source code for building.
-      - name: Build application source code
-        run: pnpm build
+#      - name: Build application source code
+#        run: pnpm build
 
       # Now, package the pre-built source code into an executable.
       - name: Package app for Windows 7 (x86)
