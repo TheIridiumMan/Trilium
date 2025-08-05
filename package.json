@@ -29,7 +29,7 @@
   },
   "private": true,
   "devDependencies": {
-      "electron": "22",
+      "electron": "22.3.7",
      "electron-builder": "^26.0.12",
     "@electron/rebuild": "4.0.1",
     "@nx/devkit": "21.3.7",
