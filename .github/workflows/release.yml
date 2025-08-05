@@ -24,8 +24,9 @@ jobs:
       - name: Install dependencies
         run: |
            npm install --save-dev vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy
-           pnpm install --no-frozen-lockfile -w
            npx svelte-kit sync
+           pnpm install --no-frozen-lockfile -w
+           
 
      # - name: Force Electron 21 for Win7 support
      #   run: |
