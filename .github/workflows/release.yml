@@ -23,15 +23,13 @@ jobs:
 
       - name: Install dependencies
         run: |
+           npm install --save-dev vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy
            pnpm install --no-frozen-lockfile -w
+           npx svelte-kit sync
 
      # - name: Force Electron 21 for Win7 support
      #   run: |
      #      pnpm install electron@21 --save-exact -w
-           
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile -w
-
 
       # ✅ Build the Electron app
       - name: Build Electron app source
