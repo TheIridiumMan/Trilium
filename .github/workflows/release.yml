@@ -13,35 +13,35 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.13.1
+          version: 8 # The official Trilium repo uses pnpm v8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18 # Use Node 18, as it's compatible with both modern Trilium and old Electron
           cache: pnpm
 
       - name: Install dependencies
-        run: |
-           npm install --save-dev vite-plugin-svgo @tailwindcss/vite vite-plugin-static-copy
-           npx svelte-kit sync
-           pnpm install --no-frozen-lockfile -w
-           
+        run: pnpm install --frozen-lockfile -w
+        
+      # This step must come AFTER the main install.
+      # It will override the default Electron version with one compatible with Win 7.
+      - name: Force Electron v22 for Win7 support
+        run: pnpm add electron@22 --save-exact -w
 
-     # - name: Force Electron 21 for Win7 support
-     #   run: |
-     #      pnpm install electron@21 --save-exact -w
+      # This step is crucial and was missing. It prepares the source code for building.
+      - name: Build application source code
+        run: pnpm build
 
-      # ✅ Build the Electron app
-      - name: Build Electron app source
-        run: pnpm nx --project=desktop electron-forge:make -- --arch=ia32 --platform=win32
-
-      # ✅ Package for Windows 7 x86
-      - name: Package app
-        run: pnpm nx --project=desktop electron-forge:make -- --arch=ia32 --platform=win32
+      # Now, package the pre-built source code into an executable.
+      - name: Package app for Windows 7 (x86)
+        # We use electron-builder directly because it gives more control.
+        # Trilium's package.json is configured for this.
+        run: pnpm nx --project=desktop electron-builder -- --win --ia32
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: trilium-next-win7-x86
-          path: dist/*
+          name: trilium-win7-x86
+          # The output from electron-builder is in dist/apps/desktop
+          path: dist/apps/desktop/*.exe 
