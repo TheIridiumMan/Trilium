@@ -18,16 +18,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 16.17.1
           cache: pnpm
 
       - name: Install dependencies
         run: |
            pnpm install --no-frozen-lockfile -w
 
-      - name: Force Electron 21 for Win7 support
-        run: |
-           pnpm install electron@21 --save-exact -w
+     # - name: Force Electron 21 for Win7 support
+     #   run: |
+     #      pnpm install electron@21 --save-exact -w
            
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile -w
@@ -35,7 +35,7 @@ jobs:
 
       # ✅ Build the Electron app
       - name: Build Electron app source
-        run: pnpm nx build desktop 
+        run: pnpm nx --project=desktop electron-forge:make -- --arch=ia32 --platform=win32
 
       # ✅ Package for Windows 7 x86
       - name: Package app
